@@ -1,0 +1,12 @@
+*.pyc
+*.DS_Store
+*__pycache__/
+*.ipynb_checkpoints/
+.idea/
+/venv/
+/models/
+/data/*
+!/data/README.md
+/vocab/*
+!/vocab/README.md
+!/vocab/moses_vocab.py
