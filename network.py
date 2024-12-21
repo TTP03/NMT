@@ -41,7 +41,7 @@ class Seq2SeqRNNEncoder(nn.Module):
         lengths = infer_length(x, pad_id=3)
         packed_enc_emb = pack_padded_sequence(
             embed,
-            lengths,
+            lengths.cpu(),
             batch_first=True,
             enforce_sorted=False,
         )
