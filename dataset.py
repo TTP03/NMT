@@ -20,7 +20,7 @@ def load_data(
     """
 
     data_list = []
-    with open(data_path, mode="r") as fp:
+    with open(data_path, mode="r", encoding="utf-8") as fp:
         if verbose:
             fp = tqdm(fp)
         for line in fp:

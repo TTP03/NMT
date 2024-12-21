@@ -1,15 +1,12 @@
 import json
 from collections import Counter
-from typing import Counter as CounterType
 from typing import Dict
-
-from mosestokenizer import MosesTokenizer
+from nltk.tokenize import word_tokenize
 from tqdm import tqdm
 
 
 def get_word2idx(
     path: str,
-    tokenizer: MosesTokenizer,
     min_count: int = 5,
     add_unk: bool = True,
     add_bos: bool = True,
@@ -20,15 +17,18 @@ def get_word2idx(
     """
     Get mapping from words to indices to use with Embedding layer.
     """
-
     word2idx: Dict[str, int] = {}
-    counter: CounterType[str] = Counter()
+    counter: Counter = Counter()
 
-    with open(path, mode="r") as fp:
+    with open(path, mode="r", encoding="utf-8") as fp:
         if verbose:
-            fp = tqdm(fp)
+            fp = tqdm(fp, desc=f"Processing {path}")
         for line in fp:
-            counter.update(tokenizer(line))
+            line = line.strip()
+            if not line:
+                continue  # Skip empty lines
+            tokens = word_tokenize(line)
+            counter.update(tokens)
 
     if add_unk:
         word2idx["<unk>"] = len(word2idx)
@@ -47,14 +47,13 @@ def get_word2idx(
 
 
 if __name__ == "__main__":
-
     # path
-    INPUT_LANG = "en"  # moses language
-    OUTPUT_LANG = "vi"  # moses language
-    INPUT_LANG_DATA_PATH = "../data/IWSLT15_English_Vietnamese/train.en"
-    OUTPUT_LANG_DATA_PATH = "../data/IWSLT15_English_Vietnamese/train.vi"
-    INPUT_LANG_VOCAB_SAVE_PATH = f"{INPUT_LANG}_vocab.json"
-    OUTPUT_LANG_VOCAB_SAVE_PATH = f"{OUTPUT_LANG}_vocab.json"
+    INPUT_LANG = "en"
+    OUTPUT_LANG = "vi"
+    INPUT_LANG_DATA_PATH = "./data/train_en.txt"
+    OUTPUT_LANG_DATA_PATH = "./data/train_vi.txt"
+    INPUT_LANG_VOCAB_SAVE_PATH = f"vocab/{INPUT_LANG}_vocab.json"
+    OUTPUT_LANG_VOCAB_SAVE_PATH = f"vocab/{OUTPUT_LANG}_vocab.json"
 
     # hyper-parameters
     MIN_COUNT = 5
@@ -66,14 +65,12 @@ if __name__ == "__main__":
 
     if VERBOSE:
         print("### PARAMETERS ###")
-        print()
         print(f"INPUT_LANG: {INPUT_LANG}")
         print(f"OUTPUT_LANG: {OUTPUT_LANG}")
         print(f"INPUT_LANG_DATA_PATH: {INPUT_LANG_DATA_PATH}")
         print(f"OUTPUT_LANG_DATA_PATH: {OUTPUT_LANG_DATA_PATH}")
         print(f"INPUT_LANG_VOCAB_SAVE_PATH: {INPUT_LANG_VOCAB_SAVE_PATH}")
         print(f"OUTPUT_LANG_VOCAB_SAVE_PATH: {OUTPUT_LANG_VOCAB_SAVE_PATH}")
-        print()
         print(f"MIN_COUNT: {MIN_COUNT}")
         print(f"ADD_UNK: {ADD_UNK}")
         print(f"ADD_BOS: {ADD_BOS}")
@@ -82,12 +79,8 @@ if __name__ == "__main__":
         print()
 
     # vocab
-    input_tokenizer = MosesTokenizer(INPUT_LANG)
-    output_tokenizer = MosesTokenizer(OUTPUT_LANG)
-
     input_lang_word2idx = get_word2idx(
         path=INPUT_LANG_DATA_PATH,
-        tokenizer=input_tokenizer,
         min_count=MIN_COUNT,
         add_unk=ADD_UNK,
         add_bos=ADD_BOS,
@@ -98,7 +91,6 @@ if __name__ == "__main__":
 
     output_lang_word2idx = get_word2idx(
         path=OUTPUT_LANG_DATA_PATH,
-        tokenizer=output_tokenizer,
         min_count=MIN_COUNT,
         add_unk=ADD_UNK,
         add_bos=ADD_BOS,
@@ -108,8 +100,8 @@ if __name__ == "__main__":
     )
 
     # save
-    with open(f"{INPUT_LANG_VOCAB_SAVE_PATH}", mode="w") as fp:
-        json.dump(input_lang_word2idx, fp)
+    with open(INPUT_LANG_VOCAB_SAVE_PATH, mode="w", encoding="utf-8") as fp:
+        json.dump(input_lang_word2idx, fp, ensure_ascii=False, indent=4)
 
-    with open(f"{OUTPUT_LANG_VOCAB_SAVE_PATH}", mode="w") as fp:
-        json.dump(output_lang_word2idx, fp)
+    with open(OUTPUT_LANG_VOCAB_SAVE_PATH, mode="w", encoding="utf-8") as fp:
+        json.dump(output_lang_word2idx, fp, ensure_ascii=False, indent=4)

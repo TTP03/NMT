@@ -12,12 +12,12 @@ from train_utils import train
 from utils import set_global_seed
 
 # path
-INPUT_LANG_TRAIN_DATA_PATH = "data/IWSLT15_English_Vietnamese/train.en"
-OUTPUT_LANG_TRAIN_DATA_PATH = "data/IWSLT15_English_Vietnamese/train.vi"
-INPUT_LANG_VAL_DATA_PATH = "data/IWSLT15_English_Vietnamese/tst2012.en"
-OUTPUT_LANG_VAL_DATA_PATH = "data/IWSLT15_English_Vietnamese/tst2012.vi"
-INPUT_LANG_TEST_DATA_PATH = "data/IWSLT15_English_Vietnamese/tst2013.en"
-OUTPUT_LANG_TEST_DATA_PATH = "data/IWSLT15_English_Vietnamese/tst2013.vi"
+INPUT_LANG_TRAIN_DATA_PATH = "data/train_en.txt"
+OUTPUT_LANG_TRAIN_DATA_PATH = "data/train_vi.txt"
+INPUT_LANG_VAL_DATA_PATH = "data/val_en.txt"
+OUTPUT_LANG_VAL_DATA_PATH = "data/val_vi.txt"
+INPUT_LANG_TEST_DATA_PATH = "data/test_en.txt"
+OUTPUT_LANG_TEST_DATA_PATH = "data/test_vi.txt"
 
 INPUT_LANG = "en"
 OUTPUT_LANG = "vi"
