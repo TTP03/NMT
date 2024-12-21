@@ -28,3 +28,4 @@ typing-extensions
 uctools
 Unidecode
 virtualenv
+nltk
