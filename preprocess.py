@@ -2,8 +2,7 @@ import re
 from nltk.tokenize import word_tokenize
 import nltk
 
-# Tải gói cần thiết nếu chưa có
-# nltk.download('punkt')
+nltk.download('punkt')
 
 def clean_dataset(file_path, output_path, language="en"):
     """
